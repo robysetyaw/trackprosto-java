@@ -1,5 +1,6 @@
 package com.trackprosto.trackprosto.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +23,14 @@ public class TransactionDetail {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String id;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "transaction_id", insertable = false, updatable = false)
+    private TransactionHeader transactionHeader;
     @Column(name = "transaction_id")
     private String transactionId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meat_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "meat_id", insertable = false, updatable = false)
     private Meat meat;
     @Column(name = "meat_id")
     private String meatId;
@@ -44,8 +49,5 @@ public class TransactionDetail {
     private String createdBy;
     @Column(name = "updated_by")
     private String updatedBy;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transaction_id")
-    private TransactionHeader transactionHeader;
 }
 
