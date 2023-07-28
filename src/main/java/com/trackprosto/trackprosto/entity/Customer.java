@@ -26,9 +26,6 @@ public class Customer {
     private String address;
     @Column(name = "company_id")
     private String companyId;
-    @ManyToOne
-    @JoinColumn(name = "company_id", insertable = false, updatable = false)
-    private Company company;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "created_at")

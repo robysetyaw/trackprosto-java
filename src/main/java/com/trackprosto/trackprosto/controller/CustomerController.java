@@ -63,7 +63,7 @@ public class CustomerController {
         dto.setFullname(customer.getFullname());
         dto.setAddress(customer.getAddress());
         dto.setPhoneNumber(customer.getPhoneNumber());
-        dto.setCompanyName(customer.getCompany() != null ? customer.getCompany().getCompanyName() : null);
+//        dto.setCompanyName(customer.getCompany() != null ? customer.getCompany().getCompanyName() : null);
         // Set other fields as needed
         return dto;
     }

@@ -29,9 +29,6 @@ public class TransactionDetail {
     private TransactionHeader transactionHeader;
     @Column(name = "transaction_id")
     private String transactionId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "meat_id", insertable = false, updatable = false)
-    private Meat meat;
     @Column(name = "meat_id")
     private String meatId;
     @Column(name = "meat_name")

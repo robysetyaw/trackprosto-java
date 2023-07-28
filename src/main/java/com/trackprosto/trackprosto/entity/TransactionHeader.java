@@ -3,6 +3,7 @@
     import com.fasterxml.jackson.annotation.JsonManagedReference;
     import jakarta.persistence.*;
     import lombok.AllArgsConstructor;
+    import lombok.Builder;
     import lombok.Data;
     import lombok.NoArgsConstructor;
     import org.hibernate.annotations.GenericGenerator;
@@ -10,6 +11,7 @@
     import java.math.BigDecimal;
     import java.time.LocalDate;
     import java.time.LocalDateTime;
+    import java.util.Date;
     import java.util.List;
 
     @Entity
@@ -17,6 +19,7 @@
     @NoArgsConstructor
     @AllArgsConstructor
     @Table(name = "transaction_headers")
+    @Builder
     public class TransactionHeader {
         @Id
         @GeneratedValue(generator = "UUID")
@@ -25,12 +28,9 @@
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
         private String id;
-        private LocalDate date;
+        private Date date;
         @Column(name = "inv_number")
         private String invNumber;
-        @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(name = "customer_id", insertable = false, updatable = false)
-        private Customer customer;
         @Column(name = "customer_id")
         private String customerId;
         private String name;
