@@ -2,8 +2,8 @@ package com.trackprosto.trackprosto.controller;
 
 
 import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
-import com.trackprosto.trackprosto.model.dto.CustomerDto;
 import com.trackprosto.trackprosto.model.entity.Customer;
+import com.trackprosto.trackprosto.model.request.CustomerRequest;
 import com.trackprosto.trackprosto.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerDto> findAll() {
+    public List<CustomerRequest> findAll() {
         return customerService.findAll()
                 .stream()
                 .map(this::convertToDto)
@@ -32,7 +32,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public CustomerDto findById(@PathVariable String id) {
+    public CustomerRequest findById(@PathVariable String id) {
         return customerService.findById(id)
                 .map(this::convertToDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));
@@ -58,8 +58,8 @@ public class CustomerController {
         return customerService.findByCompanyId(companyid);
     }
 
-    private CustomerDto convertToDto(Customer customer) {
-        CustomerDto dto = new CustomerDto();
+    private CustomerRequest convertToDto(Customer customer) {
+        CustomerRequest dto = new CustomerRequest();
         dto.setId(customer.getId());
         dto.setFullname(customer.getFullname());
         dto.setAddress(customer.getAddress());
