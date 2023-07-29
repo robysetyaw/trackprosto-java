@@ -79,6 +79,7 @@ public class TransactionService {
         newHeader.setCompany(companies.get().getCompanyName());
         newHeader.setTxType(request.getTxType());
         newHeader.setPaymentAmount(request.getPaymentAmount());
+        newHeader.setTransactionDetails(new ArrayList<>());
         TransactionHeader savedHeader = transactionHeaderRepository.save(newHeader);
         Double sumTotal = 0.0;
         for (TransactionDetailRequest detailRequest : request.getTransactionDetails()) {
@@ -99,6 +100,7 @@ public class TransactionService {
             detail.setTotal(total);
             detail.setTransactionHeader(savedHeader);
             transactionDetailRepository.save(detail);
+            savedHeader.getTransactionDetails().add(detail);
         }
         newHeader.setTotal(sumTotal);
         transactionHeaderRepository.save(newHeader);
