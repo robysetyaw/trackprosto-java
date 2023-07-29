@@ -4,7 +4,9 @@ package com.trackprosto.trackprosto.controller;
 import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
 import com.trackprosto.trackprosto.model.entity.Customer;
 import com.trackprosto.trackprosto.model.request.CustomerRequest;
+import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import com.trackprosto.trackprosto.service.CustomerService;
+import org.hibernate.sql.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +26,11 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerRequest> findAll() {
-        return customerService.findAll()
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public TemplateResponse<List<CustomerRequest>> findAll() {
+        TemplateResponse<List<CustomerRequest>> res = new TemplateResponse<List<CustomerRequest>>();
+        res.message = "success";
+        res.data = customerService.findAll();
+        return res;
     }
 
     @GetMapping("/{id}")
@@ -39,8 +41,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer save(@RequestBody Customer customer) {
-        return customerService.save(customer);
+    public Customer save(@RequestBody CustomerRequest customerRequest) {
+        return customerService.save(customerRequest);
     }
 
     @DeleteMapping("/{id}")
