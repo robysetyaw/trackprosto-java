@@ -1,7 +1,7 @@
 package com.trackprosto.trackprosto.service;
 
 
-import com.trackprosto.trackprosto.entity.Company;
+import com.trackprosto.trackprosto.model.entity.Company;
 import com.trackprosto.trackprosto.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

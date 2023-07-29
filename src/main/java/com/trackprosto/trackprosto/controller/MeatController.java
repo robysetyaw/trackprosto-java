@@ -1,6 +1,7 @@
 package com.trackprosto.trackprosto.controller;
 
-import com.trackprosto.trackprosto.entity.Meat;
+
+import com.trackprosto.trackprosto.model.entity.Meat;
 import com.trackprosto.trackprosto.service.MeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

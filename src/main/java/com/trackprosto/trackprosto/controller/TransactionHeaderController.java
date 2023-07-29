@@ -1,17 +1,15 @@
 package com.trackprosto.trackprosto.controller;
 
-import com.trackprosto.trackprosto.dto.TransactionRequest;
-import com.trackprosto.trackprosto.entity.Customer;
-import com.trackprosto.trackprosto.entity.TransactionDetail;
-import com.trackprosto.trackprosto.entity.TransactionHeader;
+
 import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
+import com.trackprosto.trackprosto.model.dto.TransactionRequest;
+import com.trackprosto.trackprosto.model.entity.TransactionHeader;
 import com.trackprosto.trackprosto.service.CustomerService;
 import com.trackprosto.trackprosto.service.TransactionHeaderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/transactions")

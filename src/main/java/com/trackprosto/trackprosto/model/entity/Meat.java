@@ -1,4 +1,4 @@
-package com.trackprosto.trackprosto.entity;
+package com.trackprosto.trackprosto.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

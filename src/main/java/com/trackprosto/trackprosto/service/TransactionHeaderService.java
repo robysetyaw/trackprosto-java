@@ -1,7 +1,8 @@
 package com.trackprosto.trackprosto.service;
 
-import com.trackprosto.trackprosto.dto.TransactionRequest;
-import com.trackprosto.trackprosto.entity.TransactionHeader;
+
+import com.trackprosto.trackprosto.model.dto.TransactionRequest;
+import com.trackprosto.trackprosto.model.entity.TransactionHeader;
 import com.trackprosto.trackprosto.repository.CompanyRepository;
 import com.trackprosto.trackprosto.repository.CustomerRepository;
 import com.trackprosto.trackprosto.repository.TransactionHeaderRepository;

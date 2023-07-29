@@ -1,6 +1,7 @@
 
 package com.trackprosto.trackprosto.repository;
-import com.trackprosto.trackprosto.entity.Meat;
+
+import com.trackprosto.trackprosto.model.entity.Meat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

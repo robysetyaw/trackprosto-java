@@ -1,6 +1,5 @@
-package com.trackprosto.trackprosto.entity;
+package com.trackprosto.trackprosto.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transaction_details")
-public class TransactionDetail {
+@Table(name = "customers")
+public class Customer {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -23,21 +22,12 @@ public class TransactionDetail {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String id;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "transaction_id", insertable = false, updatable = false)
-    private TransactionHeader transactionHeader;
-    @Column(name = "transaction_id")
-    private String transactionId;
-    @Column(name = "meat_id")
-    private String meatId;
-    @Column(name = "meat_name")
-    private String meatName;
-    private BigDecimal qty;
-    private BigDecimal price;
-    private BigDecimal total;
-    @Column(name = "is_active")
-    private Boolean isActive;
+    private String fullname;
+    private String address;
+    @Column(name = "company_id")
+    private String companyId;
+    @Column(name = "phone_number")
+    private String phoneNumber;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
@@ -46,5 +36,5 @@ public class TransactionDetail {
     private String createdBy;
     @Column(name = "updated_by")
     private String updatedBy;
+    private BigDecimal debt;
 }
-

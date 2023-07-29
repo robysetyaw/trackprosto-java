@@ -1,6 +1,7 @@
 package com.trackprosto.trackprosto.repository;
 
-import com.trackprosto.trackprosto.entity.Customer;
+
+import com.trackprosto.trackprosto.model.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,9 @@
 package com.trackprosto.trackprosto.controller;
 
-import com.trackprosto.trackprosto.dto.CustomerDto;
-import com.trackprosto.trackprosto.entity.Customer;
+
 import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
+import com.trackprosto.trackprosto.model.dto.CustomerDto;
+import com.trackprosto.trackprosto.model.entity.Customer;
 import com.trackprosto.trackprosto.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

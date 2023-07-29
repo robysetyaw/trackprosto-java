@@ -1,7 +1,8 @@
 package com.trackprosto.trackprosto.controller;
 
 
-import com.trackprosto.trackprosto.entity.Company;
+
+import com.trackprosto.trackprosto.model.entity.Company;
 import com.trackprosto.trackprosto.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

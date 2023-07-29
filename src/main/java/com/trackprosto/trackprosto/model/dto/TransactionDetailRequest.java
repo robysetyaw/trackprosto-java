@@ -1,4 +1,4 @@
-package com.trackprosto.trackprosto.dto;
+package com.trackprosto.trackprosto.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

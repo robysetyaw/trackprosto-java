@@ -1,6 +1,6 @@
 package com.trackprosto.trackprosto.service;
 
-import com.trackprosto.trackprosto.entity.Customer;
+import com.trackprosto.trackprosto.model.entity.Customer;
 import com.trackprosto.trackprosto.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
