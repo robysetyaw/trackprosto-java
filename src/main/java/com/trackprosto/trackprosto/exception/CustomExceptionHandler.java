@@ -3,7 +3,9 @@ package com.trackprosto.trackprosto.exception;
 import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import org.springframework.http.HttpStatus;
         import org.springframework.http.ResponseEntity;
-        import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
         import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
@@ -25,6 +27,13 @@ public class CustomExceptionHandler {
         public HttpStatus getHttpStatus() {
             return httpStatus;
         }
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<TemplateResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        String errorMessage = "Invalid request: " + bindingResult.getFieldError().getDefaultMessage();
+        TemplateResponse<Void> res = new TemplateResponse<>(errorMessage, null);
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 }
 

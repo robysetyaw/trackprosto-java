@@ -83,6 +83,9 @@ public class TransactionService {
         Double sumTotal = 0.0;
         for (TransactionDetailRequest detailRequest : request.getTransactionDetails()) {
             List<Meat> meat = meatRepository.findByName(detailRequest.getMeatName());
+            if (meat == null){
+                throw new CustomException("Meat not found", HttpStatus.NOT_FOUND);
+            }
             TransactionDetail detail = new TransactionDetail();
             Double qty = detailRequest.getQty();
             Double price = detailRequest.getPrice();
@@ -105,11 +108,10 @@ public class TransactionService {
     }
 
     public String generateInvNumber(int count) {
-        LocalDate now = LocalDate.now(); // get current date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // set date format
-        String dateString = now.format(formatter); // convert date to string with the format
-
-        String countString = String.format("%04d", count); // convert count to string with leading zeros
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String dateString = now.format(formatter);
+        String countString = String.format("%04d", count);
 
         return "INV-" + dateString + "-" + countString;
     }
