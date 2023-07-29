@@ -27,6 +27,10 @@ public class CustomerService {
     }
 
     public Customer save(Customer customer) {
+        Customer existingCustomer = customerRepository.findbyName(customer.getFullname());
+        if (existingCustomer !=null) {
+            throw new RuntimeException("nama customer tidak boleh sama");
+        }
         return customerRepository.save(customer);
     }
 
