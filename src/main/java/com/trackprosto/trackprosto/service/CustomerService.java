@@ -30,13 +30,6 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public CustomerRequest findById(String id) {
-        return customerRepository.findById(id)
-                .stream()
-                .map(this::convertToDto)
-                .findFirst()
-                .orElseThrow(() -> new CustomExceptionHandler.CustomException("Customer not found with id " + id, HttpStatus.NOT_FOUND));
-    }
 
     public Customer save(CustomerRequest customerRequest) {
         Customer existingCustomer = customerRepository.findbyName(customerRequest.getFullname());
@@ -58,15 +51,17 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
-    public List<Customer> findByFullName(String fullname) {
-        return customerRepository.findByFullname(fullname);
+    public CustomerRequest findByFullName(String fullname) {
+        return customerRepository.findByFullname(fullname)
+                .stream()
+                .map(this::convertToDto)
+                .findFirst()
+                .orElseThrow(() -> new CustomExceptionHandler.CustomException("Customer not found with fullname " + fullname, HttpStatus.NOT_FOUND));
     }
 
     public List<Customer> findByCompanyId(String companyId) {
         return customerRepository.findByCompanyId(companyId);
     }
-
-    // Add more methods as needed
 
     private CustomerRequest convertToDto(Customer customer) {
         CustomerRequest dto = new CustomerRequest();

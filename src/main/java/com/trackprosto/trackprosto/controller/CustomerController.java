@@ -1,19 +1,12 @@
 package com.trackprosto.trackprosto.controller;
 
-
-import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
-import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
 import com.trackprosto.trackprosto.model.entity.Customer;
 import com.trackprosto.trackprosto.model.request.CustomerRequest;
 import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import com.trackprosto.trackprosto.service.CustomerService;
-import org.hibernate.sql.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -34,17 +27,6 @@ public class CustomerController {
         return res;
     }
 
-    @GetMapping("/{id}")
-    public TemplateResponse<CustomerRequest> findById(@PathVariable String id) {
-        TemplateResponse<CustomerRequest> res = new TemplateResponse<CustomerRequest>();
-        res.message = "success";
-        res.data = customerService.findById(id);
-        return res;
-//        return customerService.findById(id)
-//                .map(this::convertToDto)
-//                .orElseThrow(() -> new CustomExceptionHandler.CustomException("Customer not found with id " + id, HttpStatus.NOT_FOUND));
-    }
-
     @PostMapping
     public Customer save(@RequestBody CustomerRequest customerRequest) {
         return customerService.save(customerRequest);
@@ -55,26 +37,13 @@ public class CustomerController {
         customerService.deleteById(id);
     }
 
-    @GetMapping("/fullname/{fullname}")
-    public List<Customer> findByFullName(@PathVariable String fullname) {
-        return customerService.findByFullName(fullname);
+    @GetMapping("/{fullname}")
+    public TemplateResponse<CustomerRequest> findByFullName(@PathVariable String fullname) {
+        TemplateResponse<CustomerRequest> res = new TemplateResponse<CustomerRequest>();
+        res.message = "success";
+        res.data = customerService.findByFullName(fullname);
+        return res;
     }
 
-    @GetMapping("/companyid/{companyid}")
-    public List<Customer> findByCompanyId(@PathVariable String companyid) {
-        return customerService.findByCompanyId(companyid);
-    }
 
-    private CustomerRequest convertToDto(Customer customer) {
-        CustomerRequest dto = new CustomerRequest();
-        dto.setId(customer.getId());
-        dto.setFullname(customer.getFullname());
-        dto.setAddress(customer.getAddress());
-        dto.setPhoneNumber(customer.getPhoneNumber());
-//        dto.setCompanyName(customer.getCompany() != null ? customer.getCompany().getCompanyName() : null);
-        // Set other fields as needed
-        return dto;
-    }
-
-    // Add more methods as needed
 }
