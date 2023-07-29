@@ -9,13 +9,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class TransactionRequest {
     private String name;
     private String txType;
-    private BigDecimal paymentAmount;
+    private Double paymentAmount;
     private List<TransactionDetailRequest> transactionDetails = new ArrayList<>();
 }

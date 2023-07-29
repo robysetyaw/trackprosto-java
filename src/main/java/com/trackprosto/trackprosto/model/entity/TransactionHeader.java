@@ -39,7 +39,7 @@
         private String phoneNumber;
         @Column(name = "tx_type")
         private String txType;
-        private BigDecimal total;
+        private Double total;
         @Column(name = "is_active")
         private Boolean isActive;
         @Column(name = "created_at")
@@ -53,7 +53,7 @@
         @Column(name = "payment_status")
         private String paymentStatus;
         @Column(name = "payment_amount")
-        private BigDecimal paymentAmount;
+        private Double paymentAmount;
         @JsonManagedReference
         @OneToMany(mappedBy = "transactionHeader", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private List<TransactionDetail> transactionDetails;

@@ -1,11 +1,10 @@
 package com.trackprosto.trackprosto.controller;
 
 
-import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
-import com.trackprosto.trackprosto.model.dto.TransactionRequest;
-import com.trackprosto.trackprosto.model.entity.TransactionHeader;
-import com.trackprosto.trackprosto.service.CustomerService;
-import com.trackprosto.trackprosto.service.TransactionHeaderService;
+import com.trackprosto.trackprosto.model.entity.Transaction;
+import com.trackprosto.trackprosto.model.request.TransactionRequest;
+import com.trackprosto.trackprosto.service.TransactionService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,45 +12,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transactions")
-public class TransactionHeaderController {
+public class TransactionController {
 
-    private final TransactionHeaderService transactionHeaderService;
-    private final CustomerService customerService;
+    private final TransactionService transactionService;
 
 
-    public TransactionHeaderController(TransactionHeaderService transactionHeaderService, CustomerService customerService) {
-        this.transactionHeaderService = transactionHeaderService;
-        this.customerService = customerService;
-
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     @GetMapping
-    public List<TransactionHeader> findAll() {
-        return transactionHeaderService.findAll();
+    public List<Transaction> findAll() {
+        return transactionService.findAll();
     }
 
     @GetMapping("/{id}")
-    public TransactionHeader findById(@PathVariable String id) {
-        return transactionHeaderService.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("TransactionHeader not found with id " + id));
+    public Transaction findById(@PathVariable String id) {
+        return transactionService.findById(id);
     }
 
     @PostMapping
-    public TransactionHeader save(@RequestBody TransactionRequest request) {
-        TransactionRequest transactionRequest =  TransactionRequest
-                .builder()
-                .name(request.getName())
-                .paymentAmount(request.getPaymentAmount())
-                .txType(request.getTxType())
-                .transactionDetails(request.getTransactionDetails())
-                .build();
-       return transactionHeaderService.save(transactionRequest);
+    public Transaction save(@Validated @RequestBody TransactionRequest request) {
+       return transactionService.save(request);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
-        transactionHeaderService.deleteById(id);
-    }
-
-    // Implement other methods as needed
 }

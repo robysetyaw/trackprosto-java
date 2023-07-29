@@ -33,9 +33,9 @@ public class TransactionDetail {
     private String meatId;
     @Column(name = "meat_name")
     private String meatName;
-    private BigDecimal qty;
-    private BigDecimal price;
-    private BigDecimal total;
+    private Double qty;
+    private Double price;
+    private Double total;
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "created_at")
@@ -47,4 +47,5 @@ public class TransactionDetail {
     @Column(name = "updated_by")
     private String updatedBy;
 }
+
 
