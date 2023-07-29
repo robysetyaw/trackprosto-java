@@ -9,6 +9,7 @@
     import org.hibernate.annotations.GenericGenerator;
 
     import java.math.BigDecimal;
+    import java.time.LocalDate;
     import java.time.LocalDateTime;
     import java.util.Date;
     import java.util.List;
@@ -27,7 +28,7 @@
                 strategy = "org.hibernate.id.UUIDGenerator"
         )
         private String id;
-        private Date date;
+        private LocalDate date;
         @Column(name = "inv_number")
         private String invNumber;
         @Column(name = "customer_id")
@@ -41,7 +42,7 @@
         private String txType;
         private Double total;
         @Column(name = "is_active")
-        private Boolean isActive;
+        private Boolean isActive = true;
         @Column(name = "created_at")
         private LocalDateTime createdAt;
         @Column(name = "updated_at")

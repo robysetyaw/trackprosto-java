@@ -1,23 +1,20 @@
 package com.trackprosto.trackprosto.service;
 
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
-import com.trackprosto.trackprosto.model.entity.Meat;
-import com.trackprosto.trackprosto.model.entity.Transaction;
-import com.trackprosto.trackprosto.model.entity.TransactionDetail;
-import com.trackprosto.trackprosto.model.entity.TransactionHeader;
+import com.trackprosto.trackprosto.model.entity.*;
 import com.trackprosto.trackprosto.model.request.TransactionDetailRequest;
 import com.trackprosto.trackprosto.model.request.TransactionRequest;
-import com.trackprosto.trackprosto.repository.CustomerRepository;
-import com.trackprosto.trackprosto.repository.MeatRepository;
-import com.trackprosto.trackprosto.repository.TransactionDetailRepository;
-import com.trackprosto.trackprosto.repository.TransactionHeaderRepository;
+import com.trackprosto.trackprosto.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -25,18 +22,19 @@ public class TransactionService {
     private final TransactionDetailRepository transactionDetailRepository;
     private final MeatRepository meatRepository;
     private final CustomerRepository customerRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public TransactionService(TransactionHeaderRepository transactionHeaderRepository, TransactionDetailRepository transactionDetailRepository, MeatRepository meatRepository, CustomerRepository customerRepository) {
+    public TransactionService(TransactionHeaderRepository transactionHeaderRepository, TransactionDetailRepository transactionDetailRepository, MeatRepository meatRepository, CustomerRepository customerRepository, CompanyRepository companyRepository) {
         this.transactionHeaderRepository = transactionHeaderRepository;
         this.transactionDetailRepository = transactionDetailRepository;
         this.meatRepository = meatRepository;
         this.customerRepository = customerRepository;
+        this.companyRepository = companyRepository;
     }
     public Transaction findById(String headerId) {
         TransactionHeader header = transactionHeaderRepository.findById(headerId)
                 .orElseThrow(() -> new CustomExceptionHandler.CustomException("TransactionHeader not found with id " + headerId, HttpStatus.NOT_FOUND));
-        List<TransactionDetail> details = transactionDetailRepository.findByTransactionHeader(header);
 
         Transaction transaction = new Transaction();
         transaction.setHeader(header);
@@ -64,7 +62,17 @@ public class TransactionService {
     @Transactional
     public Transaction save(TransactionRequest request) {
         TransactionHeader newHeader = new TransactionHeader();
+        Customer customer = customerRepository.findbyName(request.getName());
+        Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
+        int count = transactionHeaderRepository.countByDate(LocalDate.now()) + 1;
+        String invNumber = generateInvNumber(count);
+        newHeader.setInvNumber(invNumber);
+        newHeader.setDate(LocalDate.now());
+        newHeader.setCustomerId(customer.getId());
         newHeader.setName(request.getName());
+        newHeader.setAddress(customer.getAddress());
+        newHeader.setPhoneNumber(customer.getPhoneNumber());
+        newHeader.setCompany(companies.get().getCompanyName());
         newHeader.setTxType(request.getTxType());
         newHeader.setPaymentAmount(request.getPaymentAmount());
         TransactionHeader savedHeader = transactionHeaderRepository.save(newHeader);
@@ -90,6 +98,16 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         transaction.setHeader(savedHeader);
         return transaction;
+    }
+
+    public String generateInvNumber(int count) {
+        LocalDate now = LocalDate.now(); // get current date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd"); // set date format
+        String dateString = now.format(formatter); // convert date to string with the format
+
+        String countString = String.format("%04d", count); // convert count to string with leading zeros
+
+        return "INV-" + dateString + "-" + countString;
     }
 
 }
