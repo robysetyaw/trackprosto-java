@@ -1,6 +1,7 @@
 package com.trackprosto.trackprosto.service;
 
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
+import com.trackprosto.trackprosto.exception.CustomExceptionHandler.CustomException;
 import com.trackprosto.trackprosto.model.entity.*;
 import com.trackprosto.trackprosto.model.request.TransactionDetailRequest;
 import com.trackprosto.trackprosto.model.request.TransactionRequest;
@@ -63,6 +64,9 @@ public class TransactionService {
     public Transaction save(TransactionRequest request) {
         TransactionHeader newHeader = new TransactionHeader();
         Customer customer = customerRepository.findbyName(request.getName());
+        if (customer == null){
+            throw new CustomException("customer not found", HttpStatus.NOT_FOUND);
+        }
         Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
         int count = transactionHeaderRepository.countByDate(LocalDate.now()) + 1;
         String invNumber = generateInvNumber(count);
