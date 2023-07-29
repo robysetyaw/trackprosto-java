@@ -6,6 +6,7 @@ import com.trackprosto.trackprosto.model.request.CustomerRequest;
 import com.trackprosto.trackprosto.repository.CompanyRepository;
 import com.trackprosto.trackprosto.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 import java.util.List;
@@ -29,8 +30,12 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Customer> findById(String id) {
-        return customerRepository.findById(id);
+    public CustomerRequest findById(String id) {
+        return customerRepository.findById(id)
+                .stream()
+                .map(this::convertToDto)
+                .findFirst()
+                .orElseThrow(() -> new CustomExceptionHandler.CustomException("Customer not found with id " + id, HttpStatus.NOT_FOUND));
     }
 
     public Customer save(CustomerRequest customerRequest) {
@@ -65,11 +70,12 @@ public class CustomerService {
 
     private CustomerRequest convertToDto(Customer customer) {
         CustomerRequest dto = new CustomerRequest();
+        Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
         dto.setId(customer.getId());
         dto.setFullname(customer.getFullname());
         dto.setAddress(customer.getAddress());
         dto.setPhoneNumber(customer.getPhoneNumber());
-//        dto.setCompanyName(customer.getCompany() != null ? customer.getCompany().getCompanyName() : null);
+        dto.setCompanyName(companies.get().getCompanyName());
         // Set other fields as needed
         return dto;
     }

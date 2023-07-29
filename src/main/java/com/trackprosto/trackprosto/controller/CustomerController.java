@@ -1,6 +1,7 @@
 package com.trackprosto.trackprosto.controller;
 
 
+import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
 import com.trackprosto.trackprosto.exception.ResourceNotFoundException;
 import com.trackprosto.trackprosto.model.entity.Customer;
 import com.trackprosto.trackprosto.model.request.CustomerRequest;
@@ -34,10 +35,14 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public CustomerRequest findById(@PathVariable String id) {
-        return customerService.findById(id)
-                .map(this::convertToDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id " + id));
+    public TemplateResponse<CustomerRequest> findById(@PathVariable String id) {
+        TemplateResponse<CustomerRequest> res = new TemplateResponse<CustomerRequest>();
+        res.message = "success";
+        res.data = customerService.findById(id);
+        return res;
+//        return customerService.findById(id)
+//                .map(this::convertToDto)
+//                .orElseThrow(() -> new CustomExceptionHandler.CustomException("Customer not found with id " + id, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
