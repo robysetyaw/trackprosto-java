@@ -46,6 +46,16 @@ public class TransactionDetail {
     private String createdBy;
     @Column(name = "updated_by")
     private String updatedBy;
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
 
 

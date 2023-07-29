@@ -57,5 +57,16 @@
         @JsonManagedReference
         @OneToMany(mappedBy = "transactionHeader", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
         private List<TransactionDetail> transactionDetails;
+        @PrePersist
+        public void prePersist() {
+            createdAt = LocalDateTime.now();
+            updatedAt = LocalDateTime.now();
+        }
+
+        @PreUpdate
+        public void preUpdate() {
+            updatedAt = LocalDateTime.now();
+        }
     }
+
 
