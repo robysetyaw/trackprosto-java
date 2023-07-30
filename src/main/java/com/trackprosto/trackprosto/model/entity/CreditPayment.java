@@ -28,7 +28,7 @@ public class CreditPayment {
     private String invNumber;
 
     @Column(name = "payment_date")
-    private LocalDate paymentDate;
+    private LocalDate paymentDate = LocalDate.now();
 
     private Double amount;
 

@@ -29,7 +29,6 @@ public class CreditPaymentService {
         }
         creditPayment.setInvNumber(request.getInvNumber());
         creditPayment.setAmount(request.getAmount());
-        creditPayment.setPaymentDate(LocalDate.now());
         return creditPaymentRepository.save(creditPayment);
     }
 
