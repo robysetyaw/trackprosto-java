@@ -1,6 +1,7 @@
 package com.trackprosto.trackprosto.controller;
 
 import com.trackprosto.trackprosto.model.entity.CreditPayment;
+import com.trackprosto.trackprosto.model.request.CreditPaymentRequest;
 import com.trackprosto.trackprosto.service.CreditPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class CreditPaymentController {
     }
 
     @PostMapping
-    public CreditPayment save(@RequestBody CreditPayment creditPayment) {
-        return creditPaymentService.save(creditPayment);
+    public CreditPayment save(@RequestBody CreditPaymentRequest request) {
+        return creditPaymentService.save(request);
     }
 
     @GetMapping("/invoice/{invNumber}")
