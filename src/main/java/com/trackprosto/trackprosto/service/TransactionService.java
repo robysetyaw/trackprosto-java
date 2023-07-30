@@ -112,6 +112,10 @@ public class TransactionService {
                 throw new CustomException("Meat not found", HttpStatus.BAD_REQUEST);
             }
             TransactionDetail detail = new TransactionDetail();
+
+            if (meat.get(0).getStock() < detailRequest.getQty()){
+                throw new CustomException("Stock not available "+meat.get(0).getName(), HttpStatus.BAD_REQUEST );
+            }
             Double qty = detailRequest.getQty();
             Double price = detailRequest.getPrice();
             double total = qty * price;
@@ -123,11 +127,28 @@ public class TransactionService {
             detail.setQty(detailRequest.getQty());
             detail.setTotal(total);
             detail.setTransactionHeader(newHeader);
+            updateMeatStock(meat.get(0).getId(),newHeader.getTxType(),qty);
             transactionDetailRepository.save(detail);
             newHeader.getTransactionDetails().add(detail);
         }
         return sumTotal;
     }
+
+    private void updateMeatStock(String meatId,String txType ,double qty){
+        Optional<Meat> meatOptional = meatRepository.findById(meatId);
+        if (meatOptional.isPresent()){
+            Meat meat = meatOptional.get();
+            double newStock = meat.getStock();
+            if (txType.equals("out")){
+                newStock = newStock - qty;
+            } else if (txType.equals("in")) {
+                newStock = newStock + qty;
+            }
+            meat.setStock(newStock);
+            meatRepository.save(meat);
+        }
+    }
+
 
     private void updatePaymentStatus(TransactionHeader newHeader, double sumTotal) {
         if (newHeader.getPaymentAmount()>sumTotal){

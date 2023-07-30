@@ -24,10 +24,6 @@ public class MeatController {
         return meatService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Meat getMeatById(@PathVariable String id) {
-        return meatService.findById(id).orElse(null);
-    }
 
     @PostMapping
     public Meat createMeat(@RequestBody Meat meat) {
