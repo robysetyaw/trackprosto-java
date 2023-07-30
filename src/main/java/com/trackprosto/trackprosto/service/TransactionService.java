@@ -90,7 +90,7 @@ public class TransactionService {
         newCreditPaymentRequest.setAmount(request.getPaymentAmount());
         creditPaymentRepository.save(newCreditPaymentRequest);
 
-        Double sumTotal = 0.0;
+        double sumTotal = 0.0;
         for (TransactionDetailRequest detailRequest : request.getTransactionDetails()) {
             List<Meat> meat = meatRepository.findByName(detailRequest.getMeatName());
             if (meat == null){
@@ -99,7 +99,7 @@ public class TransactionService {
             TransactionDetail detail = new TransactionDetail();
             Double qty = detailRequest.getQty();
             Double price = detailRequest.getPrice();
-            Double total = qty * price;
+            double total = qty * price;
             sumTotal += total;
             detail.setMeatId(meat.get(0).getId());
             detail.setTransactionId(savedHeader.getId());
@@ -111,6 +111,15 @@ public class TransactionService {
             transactionDetailRepository.save(detail);
             savedHeader.getTransactionDetails().add(detail);
         }
+
+        if (newHeader.getPaymentAmount()>sumTotal){
+            throw new CustomException("Payment Amount is bigger than total transaction",HttpStatus.BAD_REQUEST );
+        } else if (newHeader.getPaymentAmount()<sumTotal ) {
+            newHeader.setPaymentStatus("unpaid");
+        } else if (newHeader.getPaymentAmount() == sumTotal) {
+            newHeader.setPaymentStatus("paid");
+        }
+
         newHeader.setTotal(sumTotal);
         transactionHeaderRepository.save(newHeader);
         Transaction transaction = new Transaction();
