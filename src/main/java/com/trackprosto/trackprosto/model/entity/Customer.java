@@ -36,5 +36,5 @@ public class Customer {
     private String createdBy;
     @Column(name = "updated_by")
     private String updatedBy;
-    private BigDecimal debt;
+    private Double debt;
 }

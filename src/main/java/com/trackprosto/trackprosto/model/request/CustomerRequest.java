@@ -21,4 +21,6 @@ public class CustomerRequest {
 
     @NotBlank
     private String companyName;
+
+    private String debt;
 }
