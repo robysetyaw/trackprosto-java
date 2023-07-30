@@ -71,6 +71,7 @@ public class CustomerService {
         dto.setAddress(customer.getAddress());
         dto.setPhoneNumber(customer.getPhoneNumber());
         dto.setCompanyName(companies.get().getCompanyName());
+        dto.setDebt(customer.getDebt());
         // Set other fields as needed
         return dto;
     }
