@@ -3,6 +3,7 @@ package com.trackprosto.trackprosto.service;
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler.CustomException;
 import com.trackprosto.trackprosto.model.entity.*;
+import com.trackprosto.trackprosto.model.request.CreditPaymentRequest;
 import com.trackprosto.trackprosto.model.request.TransactionDetailRequest;
 import com.trackprosto.trackprosto.model.request.TransactionRequest;
 import com.trackprosto.trackprosto.repository.*;
@@ -24,14 +25,16 @@ public class TransactionService {
     private final MeatRepository meatRepository;
     private final CustomerRepository customerRepository;
     private final CompanyRepository companyRepository;
+    private final CreditPaymentRepository creditPaymentRepository;
 
     @Autowired
-    public TransactionService(TransactionHeaderRepository transactionHeaderRepository, TransactionDetailRepository transactionDetailRepository, MeatRepository meatRepository, CustomerRepository customerRepository, CompanyRepository companyRepository) {
+    public TransactionService(TransactionHeaderRepository transactionHeaderRepository, TransactionDetailRepository transactionDetailRepository, MeatRepository meatRepository, CustomerRepository customerRepository, CompanyRepository companyRepository, CreditPaymentRepository creditPaymentRepository) {
         this.transactionHeaderRepository = transactionHeaderRepository;
         this.transactionDetailRepository = transactionDetailRepository;
         this.meatRepository = meatRepository;
         this.customerRepository = customerRepository;
         this.companyRepository = companyRepository;
+        this.creditPaymentRepository = creditPaymentRepository;
     }
     public Transaction findById(String headerId) {
         TransactionHeader header = transactionHeaderRepository.findById(headerId)
@@ -81,6 +84,12 @@ public class TransactionService {
         newHeader.setPaymentAmount(request.getPaymentAmount());
         newHeader.setTransactionDetails(new ArrayList<>());
         TransactionHeader savedHeader = transactionHeaderRepository.save(newHeader);
+
+        CreditPayment newCreditPaymentRequest = new CreditPayment();
+        newCreditPaymentRequest.setInvNumber(invNumber);
+        newCreditPaymentRequest.setAmount(request.getPaymentAmount());
+        creditPaymentRepository.save(newCreditPaymentRequest);
+
         Double sumTotal = 0.0;
         for (TransactionDetailRequest detailRequest : request.getTransactionDetails()) {
             List<Meat> meat = meatRepository.findByName(detailRequest.getMeatName());
