@@ -67,7 +67,6 @@ public class CustomerService {
     private CustomerRequest convertToDto(Customer customer) {
         CustomerRequest dto = new CustomerRequest();
         Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
-        dto.setId(customer.getId());
         dto.setFullname(customer.getFullname());
         dto.setAddress(customer.getAddress());
         dto.setPhoneNumber(customer.getPhoneNumber());

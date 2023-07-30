@@ -11,4 +11,7 @@ import java.time.LocalDate;
 public interface TransactionHeaderRepository extends JpaRepository<TransactionHeader, String> {
     @Query("SELECT COUNT(th) FROM TransactionHeader th WHERE th.date = :date")
     int countByDate(@Param("date") LocalDate date);
+
+    @Query(value = "SELECT * FROM transaction_headers WHERE inv_number = ?1", nativeQuery = true)
+    TransactionHeader findByInvNumber(String invNumber);
 }

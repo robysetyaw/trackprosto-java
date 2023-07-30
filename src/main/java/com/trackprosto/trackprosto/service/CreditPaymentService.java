@@ -2,8 +2,10 @@ package com.trackprosto.trackprosto.service;
 
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
 import com.trackprosto.trackprosto.model.entity.CreditPayment;
+import com.trackprosto.trackprosto.model.entity.TransactionHeader;
 import com.trackprosto.trackprosto.model.request.CreditPaymentRequest;
 import com.trackprosto.trackprosto.repository.CreditPaymentRepository;
+import com.trackprosto.trackprosto.repository.TransactionHeaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,10 +17,12 @@ import java.util.List;
 public class CreditPaymentService {
 
     private final CreditPaymentRepository creditPaymentRepository;
+    private final TransactionHeaderRepository transactionHeaderRepository;
 
     @Autowired
-    public CreditPaymentService(CreditPaymentRepository creditPaymentRepository) {
+    public CreditPaymentService(CreditPaymentRepository creditPaymentRepository, TransactionHeaderRepository transactionHeaderRepository) {
         this.creditPaymentRepository = creditPaymentRepository;
+        this.transactionHeaderRepository = transactionHeaderRepository;
     }
 
     public CreditPayment save(CreditPaymentRequest request) {
@@ -29,7 +33,16 @@ public class CreditPaymentService {
         }
         creditPayment.setInvNumber(request.getInvNumber());
         creditPayment.setAmount(request.getAmount());
-        return creditPaymentRepository.save(creditPayment);
+        CreditPayment res = creditPaymentRepository.save(creditPayment);
+        Double sumAmount = creditPaymentRepository.sumAmountByInvoiceNumber(request.getInvNumber());
+
+        TransactionHeader tHeader = transactionHeaderRepository.findByInvNumber(request.getInvNumber());
+        if(tHeader == null) {
+            throw new CustomExceptionHandler.CustomException("TransactionHeader not found with invoice number " + request.getInvNumber(), HttpStatus.NOT_FOUND);
+        }
+        tHeader.setPaymentAmount(sumAmount);
+        transactionHeaderRepository.save(tHeader);
+        return res;
     }
 
     public List<CreditPayment> findByInvNumber(String invNumber) {

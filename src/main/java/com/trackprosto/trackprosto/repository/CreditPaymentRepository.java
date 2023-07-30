@@ -14,5 +14,7 @@ public interface CreditPaymentRepository extends JpaRepository<CreditPayment, St
 
     @Query("SELECT c FROM CreditPayment c WHERE c.paymentDate = :date")
     List<CreditPayment> findByPaymentDate(@Param("date") LocalDate date);
+    @Query(value = "SELECT SUM(amount) FROM credit_payments WHERE inv_number = ?1", nativeQuery = true)
+    Double sumAmountByInvoiceNumber(String invNumber);
 
 }
