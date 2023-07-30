@@ -6,6 +6,7 @@ import com.trackprosto.trackprosto.model.request.CustomerRequest;
 import com.trackprosto.trackprosto.model.request.TransactionRequest;
 import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import com.trackprosto.trackprosto.service.TransactionService;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,12 @@ public class TransactionController {
         res.message = "success";
         res.data = transactionService.findAll();
         return res;
+    }
+    @GetMapping("/page")
+    public Page<Transaction> findAllWithPagination(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return transactionService.findAllWithPagination(page, size);
     }
 
     @GetMapping("/{id}")

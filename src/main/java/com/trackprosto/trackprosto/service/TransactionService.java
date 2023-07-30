@@ -8,6 +8,9 @@ import com.trackprosto.trackprosto.model.request.TransactionRequest;
 import com.trackprosto.trackprosto.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +55,7 @@ public class TransactionService {
         List<TransactionHeader> headers = transactionHeaderRepository.findAll();
         for (TransactionHeader header : headers) {
             // For each header, get the details and create a transaction
-            List<TransactionDetail> details = transactionDetailRepository.findByTransactionHeader(header);
+//            List<TransactionDetail> details = transactionDetailRepository.findByTransactionHeader(header);
             Transaction transaction = new Transaction();
             transaction.setHeader(header);
 
@@ -61,6 +64,25 @@ public class TransactionService {
 
         return transactions;
     }
+
+    public Page<Transaction> findAllWithPagination(int page, int size) {
+        int limit = size;
+        int offset = page * size;
+        List<TransactionHeader> headers = transactionHeaderRepository.findAllWithPagination(limit, offset);
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        for (TransactionHeader header : headers) {
+            Transaction transaction = new Transaction();
+            transaction.setHeader(header);
+            transactions.add(transaction);
+        }
+
+        Page<Transaction> transactionPage = new PageImpl<>(transactions, PageRequest.of(page, size), headers.size());
+
+        return transactionPage;
+    }
+
 
     @Transactional
     public Transaction save(TransactionRequest request) {

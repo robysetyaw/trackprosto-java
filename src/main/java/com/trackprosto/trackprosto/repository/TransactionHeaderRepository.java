@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface TransactionHeaderRepository extends JpaRepository<TransactionHeader, String> {
     @Query("SELECT COUNT(th) FROM TransactionHeader th WHERE th.date = :date")
@@ -17,4 +18,8 @@ public interface TransactionHeaderRepository extends JpaRepository<TransactionHe
 
     @Query("SELECT SUM(th.total - th.paymentAmount) FROM TransactionHeader th WHERE th.customerId = :customerId")
     Double sumDebtByCustomerId(@Param("customerId") String customerId);
+
+    @Query(value = "SELECT * FROM transaction_headers ORDER BY date DESC LIMIT ?1 OFFSET ?2", nativeQuery = true)
+    List<TransactionHeader> findAllWithPagination(int limit, int offset);
+
 }
