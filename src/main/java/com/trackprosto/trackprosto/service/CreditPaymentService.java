@@ -5,6 +5,7 @@ import com.trackprosto.trackprosto.repository.CreditPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,5 +26,8 @@ public class CreditPaymentService {
         return creditPaymentRepository.findPaymentsByInvNumber(invNumber);
     }
 
-    // Add other methods as needed
+    public List<CreditPayment> findByPaymentDate(LocalDate date) {
+        return creditPaymentRepository.findByPaymentDate(date);
+    }
+
 }

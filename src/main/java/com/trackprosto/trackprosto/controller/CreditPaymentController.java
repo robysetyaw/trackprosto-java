@@ -5,6 +5,7 @@ import com.trackprosto.trackprosto.service.CreditPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,11 @@ public class CreditPaymentController {
     @GetMapping("/invoice/{invNumber}")
     public List<CreditPayment> findByInvNumber(@PathVariable String invNumber) {
         return creditPaymentService.findByInvNumber(invNumber);
+    }
+
+    @GetMapping("/date/{date}")
+    public List<CreditPayment> findByPaymentDate(@PathVariable LocalDate date) {
+        return creditPaymentService.findByPaymentDate(date);
     }
 
 }
