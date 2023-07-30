@@ -3,7 +3,6 @@ package com.trackprosto.trackprosto.service;
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler;
 import com.trackprosto.trackprosto.exception.CustomExceptionHandler.CustomException;
 import com.trackprosto.trackprosto.model.entity.*;
-import com.trackprosto.trackprosto.model.request.CreditPaymentRequest;
 import com.trackprosto.trackprosto.model.request.TransactionDetailRequest;
 import com.trackprosto.trackprosto.model.request.TransactionRequest;
 import com.trackprosto.trackprosto.repository.*;
@@ -65,10 +64,22 @@ public class TransactionService {
 
     @Transactional
     public Transaction save(TransactionRequest request) {
+        TransactionHeader newHeader = createTransactionHeader(request);
+        createCreditPayment(request, newHeader.getInvNumber());
+        double sumTotal = createTransactionDetails(request, newHeader);
+        updatePaymentStatus(newHeader, sumTotal);
+        updateCustomerDebt(newHeader, newHeader.getCustomerId());
+
+        Transaction transaction = new Transaction();
+        transaction.setHeader(newHeader);
+        return transaction;
+    }
+
+    private TransactionHeader createTransactionHeader(TransactionRequest request) {
         TransactionHeader newHeader = new TransactionHeader();
         Customer customer = customerRepository.findbyName(request.getName());
         if (customer == null){
-            throw new CustomException("customer not found", HttpStatus.NOT_FOUND);
+            throw new CustomException("customer not found", HttpStatus.BAD_REQUEST);
         }
         Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
         int count = transactionHeaderRepository.countByDate(LocalDate.now()) + 1;
@@ -83,18 +94,22 @@ public class TransactionService {
         newHeader.setTxType(request.getTxType());
         newHeader.setPaymentAmount(request.getPaymentAmount());
         newHeader.setTransactionDetails(new ArrayList<>());
-        TransactionHeader savedHeader = transactionHeaderRepository.save(newHeader);
+        return transactionHeaderRepository.save(newHeader);
+    }
 
+    private void createCreditPayment(TransactionRequest request, String invNumber) {
         CreditPayment newCreditPaymentRequest = new CreditPayment();
         newCreditPaymentRequest.setInvNumber(invNumber);
         newCreditPaymentRequest.setAmount(request.getPaymentAmount());
         creditPaymentRepository.save(newCreditPaymentRequest);
+    }
 
+    private double createTransactionDetails(TransactionRequest request, TransactionHeader newHeader) {
         double sumTotal = 0.0;
         for (TransactionDetailRequest detailRequest : request.getTransactionDetails()) {
             List<Meat> meat = meatRepository.findByName(detailRequest.getMeatName());
             if (meat == null){
-                throw new CustomException("Meat not found", HttpStatus.NOT_FOUND);
+                throw new CustomException("Meat not found", HttpStatus.BAD_REQUEST);
             }
             TransactionDetail detail = new TransactionDetail();
             Double qty = detailRequest.getQty();
@@ -102,16 +117,19 @@ public class TransactionService {
             double total = qty * price;
             sumTotal += total;
             detail.setMeatId(meat.get(0).getId());
-            detail.setTransactionId(savedHeader.getId());
+            detail.setTransactionId(newHeader.getId());
             detail.setMeatName(detailRequest.getMeatName());
             detail.setPrice(detailRequest.getPrice());
             detail.setQty(detailRequest.getQty());
             detail.setTotal(total);
-            detail.setTransactionHeader(savedHeader);
+            detail.setTransactionHeader(newHeader);
             transactionDetailRepository.save(detail);
-            savedHeader.getTransactionDetails().add(detail);
+            newHeader.getTransactionDetails().add(detail);
         }
+        return sumTotal;
+    }
 
+    private void updatePaymentStatus(TransactionHeader newHeader, double sumTotal) {
         if (newHeader.getPaymentAmount()>sumTotal){
             throw new CustomException("Payment Amount is bigger than total transaction",HttpStatus.BAD_REQUEST );
         } else if (newHeader.getPaymentAmount()<sumTotal ) {
@@ -119,12 +137,15 @@ public class TransactionService {
         } else if (newHeader.getPaymentAmount() == sumTotal) {
             newHeader.setPaymentStatus("paid");
         }
-
         newHeader.setTotal(sumTotal);
         transactionHeaderRepository.save(newHeader);
-        Transaction transaction = new Transaction();
-        transaction.setHeader(savedHeader);
-        return transaction;
+    }
+
+    private void updateCustomerDebt(TransactionHeader newHeader, String customerId) {
+        Double debt = transactionHeaderRepository.sumDebtByCustomerId(customerId);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new CustomException("Customer not found", HttpStatus.NOT_FOUND));
+        customer.setDebt(debt);
+        customerRepository.save(customer);
     }
 
     public String generateInvNumber(int count) {

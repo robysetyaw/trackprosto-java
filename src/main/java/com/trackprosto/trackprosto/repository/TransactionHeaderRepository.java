@@ -14,4 +14,7 @@ public interface TransactionHeaderRepository extends JpaRepository<TransactionHe
 
     @Query(value = "SELECT * FROM transaction_headers WHERE inv_number = ?1", nativeQuery = true)
     TransactionHeader findByInvNumber(String invNumber);
+
+    @Query("SELECT SUM(th.total - th.paymentAmount) FROM TransactionHeader th WHERE th.customerId = :customerId")
+    Double sumDebtByCustomerId(@Param("customerId") String customerId);
 }
