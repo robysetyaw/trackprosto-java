@@ -35,8 +35,11 @@ public class CreditPaymentController {
     }
 
     @GetMapping("/date/{date}")
-    public List<CreditPayment> findByPaymentDate(@PathVariable LocalDate date) {
-        return creditPaymentService.findByPaymentDate(date);
+    public TemplateResponse<List<CreditPayment>> findByPaymentDate(@PathVariable LocalDate date) {
+        TemplateResponse<List<CreditPayment>> res = new  TemplateResponse<List<CreditPayment>>();
+        res.message = "succes";
+        res.data = creditPaymentService.findByPaymentDate(date);
+        return res;
     }
 
 }
