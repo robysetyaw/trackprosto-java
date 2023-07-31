@@ -28,8 +28,11 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer save(@RequestBody CustomerRequest customerRequest) {
-        return customerService.save(customerRequest);
+    public TemplateResponse<Customer> save(@RequestBody CustomerRequest customerRequest) {
+        TemplateResponse res = new TemplateResponse<Customer>();
+        res.message = "success";
+        res.data = customerService.save(customerRequest);
+        return res;
     }
 
     @DeleteMapping("/{id}")
