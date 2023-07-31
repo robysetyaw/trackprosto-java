@@ -38,9 +38,17 @@ public class TransactionController {
         return transactionService.findAllWithPagination(page, size);
     }
 
-    @GetMapping("/{id}")
-    public Transaction findById(@PathVariable String id) {
-        return transactionService.findById(id);
+//    @GetMapping("/{id}")
+//    public Transaction findById(@PathVariable String id) {
+//        return transactionService.findById(id);
+//    }
+
+    @GetMapping("/{invNumber}")
+    public TemplateResponse<Transaction> findByInvNumber(@PathVariable String invNumber) {
+        TemplateResponse<Transaction> res = new TemplateResponse<Transaction>();
+        res.message = "succes";
+        res.data = transactionService.findByInvNumber(invNumber);
+        return res;
     }
 
     @PostMapping

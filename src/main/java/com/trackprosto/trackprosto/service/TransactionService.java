@@ -48,6 +48,13 @@ public class TransactionService {
         return transaction;
     }
 
+    public  Transaction findByInvNumber(String invNumber){
+        TransactionHeader header = transactionHeaderRepository.findByInvNumber(invNumber);
+        Transaction transaction = new Transaction();
+        transaction.setHeader(header);
+        return transaction;
+    }
+
     public List<Transaction> findAll() {
         List<Transaction> transactions = new ArrayList<>();
 
