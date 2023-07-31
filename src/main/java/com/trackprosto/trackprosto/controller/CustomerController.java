@@ -30,7 +30,7 @@ public class CustomerController {
     @PostMapping
     public TemplateResponse<Customer> save(@RequestBody CustomerRequest customerRequest) {
         TemplateResponse res = new TemplateResponse<Customer>();
-        res.message = "success";
+        res.message = "success add new customer";
         res.data = customerService.save(customerRequest);
         return res;
     }
