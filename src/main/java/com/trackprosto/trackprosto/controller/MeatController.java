@@ -33,8 +33,11 @@ public class MeatController {
 
 
     @PostMapping
-    public Meat createMeat(@RequestBody Meat meat) {
-        return meatService.save(meat);
+    public TemplateResponse<Meat> createMeat(@RequestBody Meat meat) {
+        TemplateResponse res = new TemplateResponse<Meat>();
+        res.message = "succes insert meat";
+        res.data = meatService.save(meat);
+        return res;
     }
 
     @PutMapping("/{id}")
