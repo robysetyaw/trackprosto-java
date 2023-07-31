@@ -22,8 +22,11 @@ public class CreditPaymentController {
     }
 
     @PostMapping
-    public CreditPayment save(@RequestBody CreditPaymentRequest request) {
-        return creditPaymentService.save(request);
+    public TemplateResponse<CreditPayment> save(@RequestBody CreditPaymentRequest request) {
+        TemplateResponse<CreditPayment> res = new TemplateResponse<CreditPayment>();
+        res.message = "success add credit payment";
+        res.data = creditPaymentService.save(request);
+        return res;
     }
 
     @GetMapping("/invoice/{invNumber}")
