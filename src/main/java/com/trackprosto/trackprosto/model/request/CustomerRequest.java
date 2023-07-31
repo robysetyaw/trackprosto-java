@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class CustomerRequest {
 
     @NotBlank
-    private String fullname;
+    private String fullName;
 
     @NotBlank
     private String address;

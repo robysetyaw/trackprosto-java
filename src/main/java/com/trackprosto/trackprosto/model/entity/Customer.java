@@ -37,4 +37,15 @@ public class Customer {
     @Column(name = "updated_by")
     private String updatedBy;
     private Double debt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

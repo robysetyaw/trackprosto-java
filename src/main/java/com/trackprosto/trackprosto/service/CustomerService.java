@@ -33,16 +33,16 @@ public class CustomerService {
 
 
     public Customer save(CustomerRequest customerRequest) {
-        Customer existingCustomer = customerRepository.findbyName(customerRequest.getFullname());
+        List<Customer> existingCustomer = customerRepository.findByFullname(customerRequest.getFullName());
         List<Company> existingCompany = companyRepository.findByCompanyName(customerRequest.getCompanyName());
-        if (existingCustomer !=null) {
-            throw new RuntimeException("name cannot be duplicated");
+        if (!existingCustomer.isEmpty()) {
+            throw new CustomExceptionHandler.CustomException("name cannot be duplicated", HttpStatus.BAD_REQUEST);
         }
-        if (existingCompany == null){
-            throw new RuntimeException("company doesn't exist");
+        if (existingCompany.isEmpty()){
+            throw new CustomExceptionHandler.CustomException("company doesn't exist", HttpStatus.BAD_REQUEST);
         }
         Customer customer = new Customer();
-        customer.setFullname(customerRequest.getFullname());
+        customer.setFullname(customerRequest.getFullName());
         customer.setAddress(customerRequest.getAddress());
         customer.setPhoneNumber(customerRequest.getPhoneNumber());
         return customerRepository.save(customer);
@@ -67,7 +67,7 @@ public class CustomerService {
     private CustomerRequest convertToDto(Customer customer) {
         CustomerRequest dto = new CustomerRequest();
         Optional<Company> companies = companyRepository.findById(customer.getCompanyId());
-        dto.setFullname(customer.getFullname());
+        dto.setFullName(customer.getFullname());
         dto.setAddress(customer.getAddress());
         dto.setPhoneNumber(customer.getPhoneNumber());
         dto.setCompanyName(companies.get().getCompanyName());
