@@ -30,11 +30,6 @@ public class CompanyController {
         return res;
     }
 
-    @GetMapping("/{id}")
-    public Optional<Company> findById(@PathVariable String id) {
-        return companyService.findById(id);
-    }
-
     @PostMapping
     public Company save(@RequestBody Company company) {
         return companyService.save(company);

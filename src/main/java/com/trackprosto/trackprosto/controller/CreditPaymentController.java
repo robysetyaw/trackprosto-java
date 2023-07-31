@@ -2,6 +2,7 @@ package com.trackprosto.trackprosto.controller;
 
 import com.trackprosto.trackprosto.model.entity.CreditPayment;
 import com.trackprosto.trackprosto.model.request.CreditPaymentRequest;
+import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import com.trackprosto.trackprosto.service.CreditPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,11 @@ public class CreditPaymentController {
     }
 
     @GetMapping("/invoice/{invNumber}")
-    public List<CreditPayment> findByInvNumber(@PathVariable String invNumber) {
-        return creditPaymentService.findByInvNumber(invNumber);
+    public TemplateResponse<List<CreditPayment>> findByInvNumber(@PathVariable String invNumber) {
+        TemplateResponse<List<CreditPayment>> res = new TemplateResponse<List<CreditPayment>>();
+        res.message = "succes";
+        res.data = creditPaymentService.findByInvNumber(invNumber);
+        return res;
     }
 
     @GetMapping("/date/{date}")
