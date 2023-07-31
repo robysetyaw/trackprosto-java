@@ -2,6 +2,7 @@ package com.trackprosto.trackprosto.controller;
 
 
 import com.trackprosto.trackprosto.model.entity.Meat;
+import com.trackprosto.trackprosto.model.response.TemplateResponse;
 import com.trackprosto.trackprosto.service.MeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,11 @@ public class MeatController {
     }
 
     @GetMapping
-    public List<Meat> getAllMeats() {
-        return meatService.findAll();
+    public TemplateResponse<List<Meat>> getAllMeats() {
+        TemplateResponse<List<Meat>> res = new TemplateResponse<List<Meat>>();
+        res.message = "succes";
+        res.data = meatService.findAll();
+        return res;
     }
 
 
@@ -45,10 +49,4 @@ public class MeatController {
         meatService.deleteById(id);
     }
 
-    @GetMapping("/name/{name}")
-    public List<Meat> getMeatByName(@PathVariable String name) {
-        return meatService.findByName(name);
-    }
-
-    // continue with the same pattern for stock, price, and isActive
 }
