@@ -56,8 +56,11 @@ public class TransactionController {
     }
 
     @PostMapping
-    public Transaction save(@Validated @RequestBody TransactionRequest request) {
-       return transactionService.save(request);
+    public TemplateResponse<Transaction> save(@Validated @RequestBody TransactionRequest request) {
+       TemplateResponse<Transaction> res = new TemplateResponse<Transaction>();
+       res.message = "success add transaction";
+       res.data = transactionService.save(request);
+        return res;
     }
 
 }
