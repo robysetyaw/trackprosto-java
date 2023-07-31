@@ -1,5 +1,5 @@
 # trackProsto
-trackProsto adalah sebuah aplikasi berbasis Java yang memanfaatkan Spring Boot dan PostgreSQL untuk memantau proses transaksi dan gerakan stok produk daging. Aplikasi ini ditujukan untuk para Meat Retailer yang berguna untuk memantau profit dan stock.
+trackProsto adalah sebuah aplikasi berbasis Java yang memanfaatkan Spring Boot dan PostgreSQL untuk memantau proses transaksi dan gerakan stok produk daging. Aplikasi ini ditujukan untuk para Meat Retailer.
 
 ## Arsitektur Aplikasi
 
