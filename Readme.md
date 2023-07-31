@@ -33,3 +33,24 @@ Aplikasi ini menggunakan beberapa dependensi sebagai berikut:
 4. **Lombok**: Library yang membantu otomatisasi boilerplate code seperti getter, setter, dan constructor.
 
 5. **Spring Boot Starter Validation**: Starter untuk melakukan validasi data input dengan Hibernate Validator.
+
+## NativeQuery
+
+Contoh Penggunaan Native Query pada CompanyRepository
+
+public interface CompanyRepository extends JpaRepository<Company, String> {
+
+    List<Company> findByCompanyName(String companyName);
+    @Query(value = "SELECT * FROM companies", nativeQuery = true)
+    List<Company> findAll();
+
+    @Query(value = "SELECT * FROM companies WHERE id = :id", nativeQuery = true)
+    Optional<Company> findById(@Param("id") String id);
+
+    @Query(value = "INSERT INTO companies (id, name, address) VALUES (:id, :name, :address)", nativeQuery = true)
+    Company save(@Param("id") String id, @Param("name") String name, @Param("address") String address);
+
+    @Query(value = "DELETE FROM companies WHERE id = :id", nativeQuery = true)
+    void deleteById(@Param("id") String id);
+}
+
