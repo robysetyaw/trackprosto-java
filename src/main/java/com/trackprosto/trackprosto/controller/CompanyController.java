@@ -31,8 +31,11 @@ public class CompanyController {
     }
 
     @PostMapping
-    public Company save(@RequestBody Company company) {
-        return companyService.save(company);
+    public TemplateResponse<Company> save(@RequestBody Company company) {
+        TemplateResponse res = new TemplateResponse<Company>();
+        res.message = "succes insert company";
+        res.data = companyService.save(company);
+        return res;
     }
 
     @DeleteMapping("/{id}")
