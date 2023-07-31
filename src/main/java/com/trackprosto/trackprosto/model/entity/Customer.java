@@ -36,7 +36,7 @@ public class Customer {
     private String createdBy;
     @Column(name = "updated_by")
     private String updatedBy;
-    private Double debt;
+    private Double debt = (double) 0;
 
     @PrePersist
     public void prePersist() {
