@@ -45,6 +45,7 @@ public class CustomerService {
         customer.setFullname(customerRequest.getFullName());
         customer.setAddress(customerRequest.getAddress());
         customer.setPhoneNumber(customerRequest.getPhoneNumber());
+        customer.setCompanyId(existingCompany.get(0).getId());
         return customerRepository.save(customer);
     }
 
