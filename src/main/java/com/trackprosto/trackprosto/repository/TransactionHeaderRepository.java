@@ -22,4 +22,7 @@ public interface TransactionHeaderRepository extends JpaRepository<TransactionHe
     @Query(value = "SELECT * FROM transaction_headers ORDER BY date DESC LIMIT ?1 OFFSET ?2", nativeQuery = true)
     List<TransactionHeader> findAllWithPagination(int limit, int offset);
 
+    @Query(value = "SELECT * FROM transaction_headers WHERE customer_id = ?1", nativeQuery = true)
+    List<TransactionHeader> findByCustomerId(String customerId);
+
 }

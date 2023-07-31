@@ -38,21 +38,30 @@ public class TransactionService {
         this.companyRepository = companyRepository;
         this.creditPaymentRepository = creditPaymentRepository;
     }
-    public Transaction findById(String headerId) {
-        TransactionHeader header = transactionHeaderRepository.findById(headerId)
-                .orElseThrow(() -> new CustomExceptionHandler.CustomException("TransactionHeader not found with id " + headerId, HttpStatus.NOT_FOUND));
-
-        Transaction transaction = new Transaction();
-        transaction.setHeader(header);
-
-        return transaction;
-    }
 
     public  Transaction findByInvNumber(String invNumber){
         TransactionHeader header = transactionHeaderRepository.findByInvNumber(invNumber);
+        if (header.equals(null)){
+            throw new CustomException("No transaction found with invoice number : "+ invNumber,HttpStatus.BAD_REQUEST);
+        }
         Transaction transaction = new Transaction();
         transaction.setHeader(header);
         return transaction;
+    }
+
+    public List<Transaction> findByCustomerName(String customerName){
+        Customer customer = customerRepository.findbyName(customerName);
+        if (customer.equals(null)){
+            throw new CustomException("No customers found with username :" + customerName, HttpStatus.BAD_REQUEST);
+        }
+        List<TransactionHeader> headers = transactionHeaderRepository.findByCustomerId(customer.getId());
+        List<Transaction> transactions = new ArrayList<>();
+        for (TransactionHeader header: headers){
+            Transaction transaction = new Transaction();
+            transaction.setHeader(header);
+            transactions.add(transaction);
+        }
+        return transactions;
     }
 
     public List<Transaction> findAll() {

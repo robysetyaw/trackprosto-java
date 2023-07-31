@@ -38,16 +38,20 @@ public class TransactionController {
         return transactionService.findAllWithPagination(page, size);
     }
 
-//    @GetMapping("/{id}")
-//    public Transaction findById(@PathVariable String id) {
-//        return transactionService.findById(id);
-//    }
 
-    @GetMapping("/{invNumber}")
+    @GetMapping("/invoice-numbers/{invNumber}")
     public TemplateResponse<Transaction> findByInvNumber(@PathVariable String invNumber) {
         TemplateResponse<Transaction> res = new TemplateResponse<Transaction>();
         res.message = "succes";
         res.data = transactionService.findByInvNumber(invNumber);
+        return res;
+    }
+
+    @GetMapping("/customers/{customerName}")
+    public TemplateResponse<List<Transaction>> findByCustomerName(@PathVariable String customerName) {
+        TemplateResponse<List<Transaction>> res = new TemplateResponse<List<Transaction>>();
+        res.message = "succes";
+        res.data = transactionService.findByCustomerName(customerName);
         return res;
     }
 
