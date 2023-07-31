@@ -35,6 +35,7 @@ public class CompanyService {
         companyRepository.deleteById(id);
     }
 
-    // Tambahkan metode lain jika diperlukan
 }
+
+
 
