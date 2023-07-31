@@ -34,7 +34,7 @@ public class MeatController {
 
     @PostMapping
     public TemplateResponse<Meat> createMeat(@RequestBody Meat meat) {
-        TemplateResponse res = new TemplateResponse<Meat>();
+        TemplateResponse<Meat> res = new TemplateResponse<Meat>();
         res.message = "succes insert meat";
         res.data = meatService.save(meat);
         return res;
